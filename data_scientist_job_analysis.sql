@@ -1,12 +1,12 @@
 SELECT * FROM aug_train
-
+-------------------------------------------------------------------------------------------------------------------------------------------
 -- dropping columns that are not neccessary
 
 ALTER TABLE aug_train DROP COLUMN target
 ALTER TABLE aug_train DROP COLUMN company_type, city, city_development_index
 ALTER TABLE aug_train DROP COLUMN enrolled_university
 ALTER TABLE aug_train DROP COLUMN company_size
-
+---------------------------------------------------------------------------------------------------------------------------------------------
 -- Here I am counting how many different categories are there in each columns
 
 SELECT relevent_experience, COUNT(relevent_experience) FROM aug_train GROUP BY relevent_experience
@@ -16,7 +16,7 @@ SELECT gender, COUNT(gender) FROM aug_train GROUP BY gender
 SELECT training_hours, COUNT(training_hours) FROM aug_train GROUP BY training_hours
 SELECT last_new_job, COUNT(last_new_job) FROM aug_train GROUP BY last_new_job
 SELECT experience, COUNT(experience) FROM aug_train GROUP BY experience
-
+-----------------------------------------------------------------------------------------------------------------------------------------------
 --Over here I am removing or filling the cells that are blank or NULL
 
 UPDATE aug_train 
@@ -54,13 +54,28 @@ WHERE last_new_job = '>4'
 UPDATE aug_train
 SET last_new_job = '0'
 WHERE last_new_job = 'ND'
+-------------------------------------------------------------------------------------------------------------------------------------------------
+--converting datatype of column from VARCHAR to INT
 
+ALTER TABLE aug_train
+ALTER COLUMN last_new_job int
+
+ALTER TABLE aug_train
+ALTER COLUMN experience int
+
+ALTER TABLE aug_train
+ALTER COLUMN training_hours int
+
+ALTER TABLE aug_train
+ALTER COLUMN enrollee_id int
+---------------------------------------------------------------------------------------------------------------------------------------------------
 SELECT * FROM (SELECT experience, COUNT(experience) AS total_applicant FROM aug_train GROUP BY experience) AS experience1
-ORDER BY total_applicant DESC
+ORDER BY experience DESC
 
 SELECT * FROM(SELECT last_new_job, COUNT(last_new_job) AS total_applicant FROM aug_train GROUP BY last_new_job) AS last_new_job_exp
 ORDER BY total_applicant DESC
 
 SELECT * FROM(SELECT training_hours, COUNT(training_hours) AS total_applicant FROM aug_train GROUP BY training_hours) AS training_time
-ORDER BY training_hours
+ORDER BY training_hours DESC
 
+sp_columns aug_train
